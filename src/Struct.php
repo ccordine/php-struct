@@ -141,4 +141,9 @@ class Struct
     {
         return json_decode($this->json(), true);
     }
+
+    public static function generate(array $attributes = []): static
+    {
+        return new static($attributes);
+    }
 }

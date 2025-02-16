@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Structs;
+namespace Gryph\PHPStruct;
 
 use stdClass;
 use Exception;

@@ -96,7 +96,7 @@ class Struct
         return isset($typeMap[$actualType]) && $typeMap[$actualType] === $expectedType;
     }
 
-    final protected function keys()
+    final protected function keys(): array
     {
         // Create a ReflectionClass instance
         $reflectionClass = new ReflectionClass(get_class($this));

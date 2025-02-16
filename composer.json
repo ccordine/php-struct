@@ -1,0 +1,16 @@
+{
+    "name": "gryph/php-struct",
+    "description": "Generic Struct class for PHP",
+    "autoload": {
+        "psr-4": {
+            "Gryph\\PhpStruct\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Christopher",
+            "email": "ccordine@clinecthealthcare.com"
+        }
+    ],
+    "require": {}
+}

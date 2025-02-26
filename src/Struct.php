@@ -92,7 +92,13 @@ class Struct
             'array' => 'array',
             'object' => 'object',
         ];
-
+        if (is_object($value)) {                                                                                                                                                                                                            
+          $reflection = new ReflectionObject($value);                                                                                                                                                                                       
+          if ($expectedType == $reflection->getName()) {                                                                                                                                                                                    
+              return true;                                                                                                                                                                                                                    
+          }                                                                                                                                                                                                                                 
+        }                                                                                                                                                                                                                                   
+            
         return isset($typeMap[$actualType]) && $typeMap[$actualType] === $expectedType;
     }
 

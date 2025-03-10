@@ -7,6 +7,7 @@ use Exception;
 use ReflectionClass;
 use ReflectionProperty;
 use ReflectionNamedType;
+use ReflectionObject;
 
 class Nullable {}
 
@@ -16,7 +17,7 @@ class Struct
     {
         foreach ($this->keys()['all'] as $key) {
             $reflectionProperty = new ReflectionProperty($this, $key);
-            $value = data_get($arr, $key);
+            $value = $arr[$key] ?? null;
             $isNullable = $this->isNullableProperty($key);
             $expectedType = $this->getPropertyType($key);
 
@@ -37,7 +38,11 @@ class Struct
             }
 
             if ($value !== null && ! $isValid) {
-                throw new Exception("Property '{$key}' must be of type '{$expectedType}', " . gettype($value) . ' given.');
+                $expected_type_string = gettype($value);
+                if (is_object($value)) {
+                    $expected_type_string = $this->getObjectPropertyName($value);
+                }
+                throw new Exception("Property '{$key}' must be of type '{$expectedType}', " . $expected_type_string . ' given.');
             }
 
             $this->$key = $value;
@@ -74,6 +79,13 @@ class Struct
         return null;
     }
 
+    private function getObjectPropertyName(object $value): string
+    {
+
+        $reflection = new ReflectionObject($value);
+        return $reflection->getName();
+    }
+
     private function isValidType($value, ?string $expectedType): bool
     {
 
@@ -92,13 +104,18 @@ class Struct
             'array' => 'array',
             'object' => 'object',
         ];
-        if (is_object($value)) {                                                                                                                                                                                                            
-          $reflection = new \ReflectionObject($value);                                                                                                                                                                                       
-          if ($expectedType == $reflection->getName()) {                                                                                                                                                                                    
-              return true;                                                                                                                                                                                                                    
-          }                                                                                                                                                                                                                                 
-        }                                                                                                                                                                                                                                   
-            
+        if (is_object($value)) {
+            // die($expectedType);
+            $returnVal = false;
+            if ($expectedType == $this->getObjectPropertyName($value)) {
+                $returnVal = true;
+            }
+            if ($returnVal == false && $value instanceof $expectedType) {
+                $returnVal = true;
+            }
+            return $returnVal;
+        }
+
         return isset($typeMap[$actualType]) && $typeMap[$actualType] === $expectedType;
     }
 

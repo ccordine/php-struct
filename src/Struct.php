@@ -93,7 +93,7 @@ class Struct
             'object' => 'object',
         ];
         if (is_object($value)) {                                                                                                                                                                                                            
-          $reflection = new ReflectionObject($value);                                                                                                                                                                                       
+          $reflection = new \ReflectionObject($value);                                                                                                                                                                                       
           if ($expectedType == $reflection->getName()) {                                                                                                                                                                                    
               return true;                                                                                                                                                                                                                    
           }                                                                                                                                                                                                                                 
